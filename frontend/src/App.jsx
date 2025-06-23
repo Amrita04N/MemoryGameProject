@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { fetchMessage } from "./api/message";
+import SceneViewer from "./components/SceneViewer";
+import ChoicePanel from "./components/ChoicePanel";
+import { fetchScene, postChoice } from "./api/scene";
 
 export default function App() {
-  const [message, setMessage] = useState("");
+  const [scene, setScene] = useState(null);
 
   useEffect(() => {
-    fetchMessage().then((data) => setMessage(data.message));
+    fetchScene(1).then(setScene);
   }, []);
 
+  const handleChoiceSelect = async (choice) => {
+    const nextScene = await postChoice(choice);
+    setScene(nextScene);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-600">{message}</h1>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+      {scene && (
+        <>
+          <SceneViewer title={scene.title} narrative={scene.narrative} />
+          <ChoicePanel choices={scene.choices} onChoiceSelect={handleChoiceSelect} />
+        </>
+      )}
     </div>
   );
 }

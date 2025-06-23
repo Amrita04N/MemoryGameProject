@@ -1,16 +1,17 @@
+# backend/main.py
 from fastapi import FastAPI
-from routes import message
 from fastapi.middleware.cors import CORSMiddleware
+from routes.scene import router as scene_router
 
 app = FastAPI()
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all for now
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(message.router)
-
+app.include_router(scene_router)

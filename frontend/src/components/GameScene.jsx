@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchScene } from "../api/sceneApi";
+import { fetchScene } from "../api/scene";
 
 const GameScene = () => {
   const [scene, setScene] = useState(null);
