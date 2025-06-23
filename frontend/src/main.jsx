@@ -8,3 +8,11 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
+import { PlayerProvider } from "./context/PlayerContext";
+
+<React.StrictMode>
+  <PlayerProvider>
+    <App />
+  </PlayerProvider>
+</React.StrictMode>

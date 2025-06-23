@@ -15,3 +15,6 @@ app.add_middleware(
 )
 
 app.include_router(scene_router)
+
+from routes.progress import router as progress_router
+app.include_router(progress_router)
