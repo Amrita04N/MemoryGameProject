@@ -1,18 +1,16 @@
 // src/components/ChoicePanel.jsx
-import React from "react";
+const ChoicePanel = ({ choices = [], onChoiceSelect }) => (
+  <div className="flex flex-col gap-2">
+    {choices.map((choice, index) => (
+      <button
+        key={index}
+        onClick={() => onChoiceSelect(choice)}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        {choice}
+      </button>
+    ))}
+  </div>
+);
 
-export default function ChoicePanel({ choices, onChoiceSelect }) {
-  return (
-    <div className="mt-6 flex flex-col gap-4">
-      {choices.map((choice, index) => (
-        <button
-          key={index}
-          className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-          onClick={() => onChoiceSelect(choice)}
-        >
-          {choice}
-        </button>
-      ))}
-    </div>
-  );
-}
+export default ChoicePanel;

@@ -8,7 +8,10 @@ export async function saveProgress(userId, progressData) {
     ...progressData,
   });
 }
-
+export const getProgress = async (userId) => {
+  const res = await axios.get(`${API}/progress/${userId}`);
+  return res.data;
+}
 export async function fetchProgress(userId) {
   const res = await axios.get(`${BASE_URL}/progress/${userId}`);
   return res.data;

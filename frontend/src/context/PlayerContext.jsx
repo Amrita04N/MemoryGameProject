@@ -11,9 +11,23 @@ export const PlayerProvider = ({ children }) => {
   const addMemoryFact = (fact) => setMemoryFacts((prev) => [...prev, fact]);
   const updatePath = (sceneId) => setPath((prev) => [...prev, sceneId]);
 
+  const setPlayerState = ({ path, inventory, memory }) => {
+    setPath(path || []);
+    setInventory(inventory || []);
+    setMemoryFacts(memory || []);
+  };
+
   return (
     <PlayerContext.Provider
-      value={{ inventory, memoryFacts, path, addToInventory, addMemoryFact, updatePath }}
+      value={{
+        inventory,
+        memoryFacts,
+        path,
+        addToInventory,
+        addMemoryFact,
+        updatePath,
+        setPlayerState, // ✅ added
+      }}
     >
       {children}
     </PlayerContext.Provider>

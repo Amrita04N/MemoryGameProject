@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import SceneViewer from "./components/SceneViewer";
-import ChoicePanel from "./components/ChoicePanel";
-import { fetchScene, postChoice } from "./api/scene";
-import { saveProgress } from "./api/progress"; // <-- NEW
-import { usePlayer } from "./context/PlayerContext"; // <-- NEW
+import ChoicePanel from "./components/ChoicePanel"; // ✅ default import
+import { dummyScenes } from "./data/dummyScenes";
+import { usePlayer } from "./context/PlayerContext";
+import InventoryPanel from "./components/InventoryPanel";
+import MemoryPanel from "./components/MemoryPanel";
 
 export default function App() {
   const [scene, setScene] = useState(null);
 
-  // 🧠 Access player state and actions
   const {
     path,
     inventory,
@@ -18,62 +18,58 @@ export default function App() {
     updatePath,
   } = usePlayer();
 
-  // 🔁 Initial scene load
   useEffect(() => {
-    fetchScene(1).then((data) => {
-      setScene(data);
-      updatePath(data.id); // Start scene tracking
-    });
+    const sceneToLoad = dummyScenes[1];
+    setScene(sceneToLoad);
+    updatePath(sceneToLoad.id);
   }, []);
 
-  // 🔁 Save progress whenever player state updates
-  useEffect(() => {
-    if (path.length > 0) {
-      saveProgress("user123", {
-        user_id: "user123",
-        path,
-        inventory,
-        memory: memoryFacts,
-      });
-    }
-  }, [path, inventory, memoryFacts]);
-
-  // 🕹️ Handle player choice
-  const handleChoiceSelect = async (choice) => {
+  const handleChoiceSelect = (choice) => {
     addMemoryFact(`Chose: ${choice}`);
 
-    const nextScene = await postChoice(choice);
-
-    // Example: simulate adding inventory
-    if (nextScene.title === "The River") {
-      addToInventory("Wooden Stick");
+    // Simulate inventory collection (optional logic)
+    if (choice.toLowerCase().includes("boat")) {
+      addToInventory("Wooden Paddle");
+    } else if (choice.toLowerCase().includes("castle")) {
+      addToInventory("Rusty Key");
     }
 
-    updatePath(nextScene.id);
+    // Navigate to next dummy scene
+    let nextId;
+    if (choice.toLowerCase().includes("left") || choice.toLowerCase().includes("boat")) {
+      nextId = 2;
+    } else if (choice.toLowerCase().includes("right") || choice.toLowerCase().includes("castle")) {
+      nextId = 3;
+    } else {
+      nextId = 1;
+    }
+
+    const nextScene = dummyScenes[nextId];
     setScene(nextScene);
+    updatePath(nextScene.id);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
+      <h1 className="text-4xl font-extrabold text-indigo-600 mb-6">🧠 Memory Game</h1>
+
+      {/* ✅ Inventory & Memory UI Panels */}
+      <InventoryPanel items={inventory} />
+      <MemoryPanel facts={memoryFacts} />
+
       {scene && (
         <>
-          <SceneViewer title={scene.title} narrative={scene.narrative} />
-          <ChoicePanel choices={scene.choices} onChoiceSelect={handleChoiceSelect} />
+          <SceneViewer
+            title={scene.title}
+            narrative={scene.narrative}
+            image={scene.image}
+          />
+          <ChoicePanel
+            choices={scene.choices}
+            onChoiceSelect={handleChoiceSelect}
+          />
         </>
       )}
     </div>
   );
 }
-
-import { saveProgress } from "./api/progress";
-import { usePlayer } from "./context/PlayerContext";
-
-useEffect(() => {
-  const data = {
-    path,
-    inventory,
-    memory: memoryFacts,
-  };
-  saveProgress("user123", data);  // hardcoded user for now
-}, [path, inventory, memoryFacts]);
-

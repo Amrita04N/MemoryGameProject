@@ -1,11 +1,12 @@
-import { usePlayer } from "../context/PlayerContext";
+import React from "react";
 
-export default function MemoryPanel() {
-  const { memoryFacts } = usePlayer();
+export default function MemoryPanel({ facts }) {
   return (
-    <div className="p-4 border rounded bg-white">
-      <h2 className="font-bold mb-2">Memory Facts</h2>
-      <ul>{memoryFacts.map((fact, i) => <li key={i}>{fact}</li>)}</ul>
+    <div className="bg-white rounded-lg shadow p-4 mb-4 w-full max-w-md">
+      <h3 className="font-semibold text-lg mb-2">🧠 Memory</h3>
+      <ul className="list-disc pl-5 text-gray-700">
+        {facts.length > 0 ? facts.map((fact, idx) => <li key={idx}>{fact}</li>) : <li>No facts yet</li>}
+      </ul>
     </div>
   );
 }
