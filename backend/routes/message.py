@@ -1,4 +1,4 @@
-# backend/routes/message.py
+
 from fastapi import APIRouter
 from schemas.message import ChoiceRequest, SceneResponse
 

@@ -1,4 +1,3 @@
-# backend/schemas/message.py
 from pydantic import BaseModel
 from typing import List
 

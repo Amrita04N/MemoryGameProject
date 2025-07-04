@@ -1,10 +1,9 @@
-# backend/routes/scene.py
 from fastapi import APIRouter
 from pydantic import BaseModel
 
 router = APIRouter()
 
-# Mock scenes data
+
 scenes = {
     1: {
         "id": 1,
@@ -31,4 +30,4 @@ def get_scene(scene_id: int):
 
 @router.post("/choice")
 def make_choice(choice: Choice):
-    return scenes.get(2)  # always return scene 2 as dummy response
+    return scenes.get(2)  

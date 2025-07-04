@@ -1,22 +1,14 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
+from schemas.progress import Progress
+from services.progress_services import save_progress, get_progress
 
-router = APIRouter(prefix="/progress", tags=["progress"])
-
-# Simulated in-memory store
-player_progress = {}
-
-class ProgressData(BaseModel):
-    user_id: str
-    path: list[int]
-    inventory: list[str]
-    memory: list[str]
-
-@router.post("/{user_id}")
-def update_progress(user_id: str, data: ProgressData):
-    player_progress[user_id] = data.dict()
-    return {"message": "Progress updated."}
+router = APIRouter(prefix="/progress", tags=["Progress"])
 
 @router.get("/{user_id}")
-def get_progress(user_id: str):
-    return player_progress.get(user_id, {"message": "No progress yet."})
+def fetch_progress(user_id: str):
+    return get_progress(user_id)
+
+@router.post("/{user_id}")
+def update_progress(user_id: str, progress: Progress):
+    save_progress(user_id, progress.dict())
+    return {"status": "saved"}
