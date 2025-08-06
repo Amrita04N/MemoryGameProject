@@ -1,8 +1,9 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class Progress(BaseModel):
-    user_id: str
-    path: List[int]
-    inventory: List[str]
-    memory: List[str]
+    scene_id: int
+    path: Optional[str] = ""
+    memory: Optional[List[str]] = []
+    inventory: Optional[List[str]] = []
+    score: Optional[int] = 0  # ✅ New field for score

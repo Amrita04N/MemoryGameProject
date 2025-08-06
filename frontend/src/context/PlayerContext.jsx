@@ -1,37 +1,45 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const PlayerContext = createContext();
 
-export const PlayerProvider = ({ children }) => {
+export function PlayerProvider({ children }) {
   const [inventory, setInventory] = useState([]);
-  const [memoryFacts, setMemoryFacts] = useState([]);
-  const [path, setPath] = useState([]);
+  const [memory, setMemory] = useState([]);
+  const [path, setPath] = useState("");
+  const [score, setScore] = useState(0); // ✅ Add score
 
-  const addToInventory = (item) => setInventory((prev) => [...prev, item]);
-  const addMemoryFact = (fact) => setMemoryFacts((prev) => [...prev, fact]);
-  const updatePath = (sceneId) => setPath((prev) => [...prev, sceneId]);
+  const addToInventory = (item) => setInventory([...inventory, item]);
+  const addMemoryFact = (fact) => setMemory([...memory, fact]);
+  const updatePath = (sceneId) => setPath((prev) => `${prev} -> ${sceneId}`);
 
-  const setPlayerState = ({ path, inventory, memory }) => {
-    setPath(path || []);
-    setInventory(inventory || []);
-    setMemoryFacts(memory || []);
+  const addScore = (points) => setScore((prev) => prev + points); // ✅ Increment score
+  const resetScore = () => setScore(0); // ✅ Reset score
+
+  const resetProgress = () => {
+    setInventory([]);
+    setMemory([]);
+    setPath("");
+    setScore(0); // ✅ Reset score too
   };
 
   return (
     <PlayerContext.Provider
       value={{
         inventory,
-        memoryFacts,
+        memory,
         path,
+        score, // ✅ expose score
         addToInventory,
         addMemoryFact,
         updatePath,
-        setPlayerState, // ✅ added
+        addScore,
+        resetScore,
+        resetProgress,
       }}
     >
       {children}
     </PlayerContext.Provider>
   );
-};
+}
 
 export const usePlayer = () => useContext(PlayerContext);
